@@ -20,7 +20,7 @@ class CreateContactTable extends Migration
             $table->unsignedBigInteger('id_pearson');
             $table->foreign('id_pearson')
                 ->references('id')
-                ->on('pearsons');
+                ->on('persons');
         });
     }
 

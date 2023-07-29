@@ -9,9 +9,11 @@ class Pearson extends Model
 {
     use HasFactory;
 
-    protected $table = 'pearson';
+    protected $table = 'persons';
 
     protected $fillable = ['name', 'email'];
+
+    public $timestamps = false;
 
     public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

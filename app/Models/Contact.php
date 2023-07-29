@@ -9,9 +9,11 @@ class Contact extends Model
 {
     use HasFactory;
 
-    protected $table = 'contact';
+    protected $table = 'contacts';
 
     protected $fillable = ['country_code', 'number', 'id_pearson'];
+
+    public $timestamps = false;
 
     public function pearson(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

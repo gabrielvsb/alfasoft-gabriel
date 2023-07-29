@@ -13,7 +13,7 @@ class CreatePearsonTable extends Migration
      */
     public function up()
     {
-        Schema::create('pearson', function (Blueprint $table) {
+        Schema::create('pearsons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email');

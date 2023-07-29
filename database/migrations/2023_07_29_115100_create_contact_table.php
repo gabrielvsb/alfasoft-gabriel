@@ -13,14 +13,14 @@ class CreateContactTable extends Migration
      */
     public function up()
     {
-        Schema::create('contact', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->string('country_code');
             $table->string('number');
             $table->unsignedBigInteger('id_pearson');
             $table->foreign('id_pearson')
                 ->references('id')
-                ->on('pearson');
+                ->on('pearsons');
         });
     }
 

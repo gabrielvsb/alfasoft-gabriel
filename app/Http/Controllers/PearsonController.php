@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use App\Models\Pearson;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class PearsonController extends Controller
             $pearson_list = Pearson::all()->toArray();
             return view('pearson.index', ['persons' => $pearson_list]);
         }catch (\Exception $exception){
-            return view('error.index', $exception->getMessage());
+            return view('error.index', ['msg' => $exception->getMessage()]);
         }
     }
 
@@ -45,6 +46,20 @@ class PearsonController extends Controller
         }
     }
 
+    public function getPearsonContacts($id_pearson)
+    {
+        try {
+            $list_contacts = Pearson::find($id_pearson)->contacts;
+
+            if(empty($list_contacts)){
+                return response()->json('Not found!', 404);
+            }
+            return response()->json($list_contacts);
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage());
+        }
+    }
+
     public function update(Request $request){
         try {
             $inputs = $request->all();
@@ -63,7 +78,15 @@ class PearsonController extends Controller
         }
     }
 
-    public function destroy($id_pearson){
+    public function destroy(Request $request){
+        try {
+            $inputs = $request->all();
+            Contact::where('id_pearson', $inputs['idPearson'])->delete();
+            Pearson::destroy($inputs['idPearson']);
 
+            return response()->json('Pearson deleted!');
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage());
+        }
     }
 }

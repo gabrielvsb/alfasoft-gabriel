@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PearsonController::class, 'index']);
 Route::get('/pearson/{id}', [PearsonController::class, 'getPearson'])->name('getPearson');
+Route::get('/pearson/contacts/{id}', [PearsonController::class, 'getPearsonContacts'])->name('getPearsonContacts');
 Route::post('/pearson', [PearsonController::class, 'store'])->name('storePearson');
 Route::post('/pearson/edit', [PearsonController::class, 'update'])->name('editPearson');
+Route::post('/pearson/delete', [PearsonController::class, 'destroy'])->name('deletePearson');
 Route::post('/contact', [ContactController::class, 'store'])->name('storeContact');

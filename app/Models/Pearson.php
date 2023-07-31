@@ -17,7 +17,7 @@ class Pearson extends Model
 
     public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Contact::class);
+        return $this->hasMany(Contact::class, 'id_pearson');
     }
 
 }

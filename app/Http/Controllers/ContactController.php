@@ -24,4 +24,16 @@ class ContactController extends Controller
             return response()->json($exception->getMessage());
         }
     }
+
+    public function destroy($id_contact)
+    {
+        try {
+            Contact::destroy($id_contact);
+
+            return response()->json('Contact created!');
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage());
+        }
+    }
+
 }

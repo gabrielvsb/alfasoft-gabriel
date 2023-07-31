@@ -32,8 +32,10 @@
                         <td>{{$pearson['name']}}</td>
                         <td>{{$pearson['email']}}</td>
                         <td>
-                            <button data-id="{{$pearson['id']}}" class="btnAddContactModal btn btn-primary"><i class="bi bi-telephone-plus-fill"></i></button>
-                            <button data-id="{{$pearson['id']}}" class="btnEditPearsonModal btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                            <button data-id="{{$pearson['id']}}" title="Add Contact" class="btnAddContactModal btn btn-primary"><i class="bi bi-telephone-plus-fill"></i></button>
+                            <button data-id="{{$pearson['id']}}" title="Edit Pearson" class="btnEditPearsonModal btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                            <button data-id="{{$pearson['id']}}" title="List Contacts" class="btnListContactsModal btn btn-secondary"><i class="bi bi-list"></i></button>
+                            <button data-id="{{$pearson['id']}}" title="Delete Pearson" class="btnDeletePearson btn btn-danger"><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -45,6 +47,7 @@
 @endsection
 
 @include('contact.add_contact_modal')
+@include('contact.list_contact_modal')
 @include('pearson.edit_pearson_modal')
 @include('pearson.add_pearson_modal')
 
@@ -88,6 +91,82 @@
             let modal = new bootstrap.Modal(document.getElementById('editPearsonModal'))
             modal.show();
         });
+
+        $('.btnDeletePearson').on('click', function (){
+            if(confirm('Do you really want delete this pearson?')){
+                let id = $(this).data('id');
+                let urlRoute = '{{ route("deletePearson") }}';
+
+                const dataForm = new FormData();
+
+                dataForm.append('idPearson', id);
+                dataForm.append("_token", "{{ csrf_token() }}");
+
+                $.ajax({
+                    url: urlRoute,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    data: dataForm,
+                    processData: false,
+                    cache: false,
+                    contentType: false,
+                    success: function(result){
+                        alert(result);
+                        window.location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                    }
+                });
+            }
+
+        });
+
+
+        $('.btnListContactsModal').on('click', function (){
+            let table = $('#tableContacts');
+            let tbody = $('#tbodyContacts');
+            let loader = $('.loader');
+            let id = $(this).data('id');
+            let urlRoute = '{{ route("getPearsonContacts", ":id") }}';
+
+            urlRoute = urlRoute.replace(':id', id);
+
+            loader.show();
+            table.hide();
+
+            $.ajax({
+                url: urlRoute,
+                method: 'GET',
+                success: function(result){
+                    let html = '';
+                    $.each(result, function( index, value ) {
+                        html += '<tr>';
+                        html += '<td>' + value.country_code + '</td>';
+                        html += '<td>' + value.number + '</td>';
+                        html += '<td><button data-id="' + value.id + '" title="Delete Contact" class="btnDeleteContact btn btn-sm btn-danger">Delete</button></td>';
+                        html += '</tr>';
+                    });
+                    tbody.html(html);
+                    table.show();
+                    loader.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+
+
+            $('#idPearson').val(id);
+            let modal = new bootstrap.Modal(document.getElementById('listContactModal'))
+            modal.show();
+        });
+
+        $('.btnDeleteContact').on('click', function (){
+            console.log('teste');
+        })
 
         $('#countryCodeSelect').on('keyup', function (){
             let text = $('#countryCodeSelect').val()
